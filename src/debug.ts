@@ -56,6 +56,8 @@ export interface GameApi {
   readonly version: 1;
   /** Booted, and the frame loop running. */
   readonly ready: boolean;
+  /** How long the boot took, from the page's start to ready, in milliseconds; 0 until it has. */
+  readonly bootMs: number;
 
   pause(): void;
   resume(): void;
@@ -93,6 +95,7 @@ export interface GameApi {
 export interface DebugHost {
   game: Game;
   ready(): boolean;
+  bootMs(): number;
   paused(): boolean;
   setPaused(paused: boolean): void;
   /** Play one frame of `dt`, without drawing. */
@@ -112,6 +115,9 @@ export function createApi(host: DebugHost): GameApi {
     version: 1,
     get ready() {
       return host.ready();
+    },
+    get bootMs() {
+      return host.bootMs();
     },
     pause: () => host.setPaused(true),
     resume: () => host.setPaused(false),

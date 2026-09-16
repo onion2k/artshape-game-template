@@ -1,8 +1,10 @@
 # artshape-game-template
 
 The starting point for a game on [artshape-render](https://github.com/onion2k/artshape-render)
-and [artshape-physics](https://github.com/onion2k/artshape-physics): a stub
-game with every check a finished one has, all green on the first commit.
+and [artshape-physics](https://github.com/onion2k/artshape-physics): a
+software factory for a browser game that loads fast, draws fast and has no
+bugs. A stub game with every check a finished one has, all green on the
+first commit, and those three properties held as numbers from then on.
 
 Taken from [Pushminer](https://github.com/onion2k/miner) in September 2026,
 which grew its harness one gate at a time as bugs found the gaps. A new game
@@ -39,21 +41,37 @@ and dear to retrofit:
 - **A file of always-true rules**, `src/invariants.ts`, checked by the
   fuzzer after everything it does.
 
-And every gate at n=1:
+And every gate at n=1, the three properties among them:
 
     npm run check:quick    formatting, types, lint, unit tests (the pre-commit hook)
     npm run fuzz           a monkey plays it, and the rules are checked
     npm run determinism    the same seed played twice, hashed
     npm run leaks          a long game, watching what must stay bounded
     npm run pace:check     how it plays, held to a baseline both ways
-    npm run bench          what a frame costs, held to a baseline
+    npm run bench          what the physics costs a frame, held to a baseline
+    npm run perf           boot time, a frame's cost and the download, held to a budget and a baseline
     npm run smoke          the real thing in headless Chromium on the GPU
     npm run look           what it looks like, held to a picture
     npm run check          all of it
 
 One fuzzer action, one invariant, one watched size, one bench scenario, one
 pace figure, one saved shape in `test/saves/`, one picture, one stage in the
-play-through. Each is a model for the next.
+play-through, and one perf figure each for boot, frame and download. Each is
+a model for the next.
+
+The line every change goes down is in `CLAUDE.md`: a spec agreed, tests
+seen failing, the change built, every gate run, the result looked at, a
+report with evidence, then a commit. A red gate stops the line until it is
+fixed, and no baseline is moved to make it green.
+
+## What comes with it
+
+Four skills in `.claude/skills`, so the practice travels with the repo:
+`/feature` to build one, spec and tests first; `/bug` to fix one,
+reproduction first; `/gate-moved` for when a baseline moves; `/commit` for
+the house style. `CLAUDE.md` says how the code is laid out, what the
+gates hold, the edge cases a new thing has to meet, and how the stub gives
+way. `.claude/settings.json` lets the repo's own checks run without asking.
 
 ## Starting a game from it
 
@@ -61,9 +79,9 @@ play-through. Each is a model for the next.
    the storage key in `src/progress.ts`, the ports in `vite.config.ts`,
    `playwright.config.ts` and `.claude/launch.json`.
 2. `npm install`, which also points git at the pre-commit hook.
-3. `npm run bench -- --update` and `npm run pace:check -- --update` for
-   baselines from this machine, and `npm run look:update` for its picture.
-   Look at the picture.
+3. `npm run bench -- --update`, `npm run pace:check -- --update` and
+   `npm run perf:update` for baselines from this machine, and
+   `npm run look:update` for its picture. Look at the picture.
 4. `npm run check`. Green is the first commit.
 5. Fill in the square brackets in `CLAUDE.md`: what the game is, and its
    edge-case checklist in its own terms. The house rules in

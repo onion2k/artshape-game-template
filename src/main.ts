@@ -184,9 +184,11 @@ async function main() {
   // the test's, of a length it chose
   let paused = query.has('paused');
   let ready = false;
+  let bootMs = 0;
   window.game = createApi({
     game,
     ready: () => ready,
+    bootMs: () => bootMs,
     paused: () => paused,
     setPaused: (p) => {
       paused = p;
@@ -219,5 +221,6 @@ async function main() {
     draw(dt);
   };
   ready = true;
+  bootMs = performance.now();
   requestAnimationFrame(frame);
 }
