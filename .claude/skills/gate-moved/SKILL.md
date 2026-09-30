@@ -29,6 +29,9 @@ Noise looks like a swing on few seeds or one run. Before believing it:
   the machine out of it, and does so while the machine has cores to spare.
   With most of them at other work the two do not slow alike, and the figure
   can read a sixth out either way.
+- **The download:** it does not wobble, so a byte is real. Find what in
+  the change added it (`npx vite build` at the change and its parent), and
+  whether that is what the change is for.
 - **A picture:** look at the three files a failure leaves in
   `test-results/`: the picture it was held to, what was drawn, and the
   difference. A change in the game is a shape; the GPU's own drift is

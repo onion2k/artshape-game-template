@@ -39,7 +39,7 @@ Numbers, held by gates, on this machine at 1280×800:
 | Property                                               | Budget                         | Held by      |
 | ------------------------------------------------------ | ------------------------------ | ------------ |
 | Boot, page start to the frame loop running             | 3000 ms                        | `perf`       |
-| Download, scripts and styles gzipped                   | 400 kB                         | `perf`       |
+| Download, scripts and styles gzipped                   | 400 kB; baseline to the byte   | `perf`       |
 | A frame drawn, the least of 24 at the standard view    | 8 ms                           | `perf`       |
 | The physics, a frame, against the reference arithmetic | baseline ± 15%                 | `bench`      |
 | Pace, the autopilot's minutes to bank ten balls        | baseline ± 20%                 | `pace:check` |
@@ -48,7 +48,10 @@ Numbers, held by gates, on this machine at 1280×800:
 A budget is what the game may cost at all; a baseline is what it cost at
 the last commit, held both ways, so a step toward a budget is noticed as
 much as a step over it. The perf tolerances are the measured wobble of a
-headless boot and a GPU frame, and say so in the file.
+headless boot and a GPU frame, and say so in `smoke/judging.ts`. The
+download does not wobble, so it is held to the byte: a change that adds to
+it writes the perf baseline again and says by how much, and one that
+should not have is looked into.
 
 ## Commands
 
