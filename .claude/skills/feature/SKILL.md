@@ -14,6 +14,14 @@ test API, edge-case checklist and gates. If any of those is missing, say so
 in the spec, find it from the code, and offer to write it into CLAUDE.md as
 part of the work: the next feature should not have to look again.
 
+Phases 1 and 2, understanding and the spec, are done in plan mode. Under
+the `opusplan` model setting the stronger model works only in plan mode,
+and the spec is where it counts: what is built is only as good as what was
+agreed. So enter plan mode (`EnterPlanMode`) before phase 1 if the session
+is not in it already, write the spec as the plan, and leave plan mode
+(`ExitPlanMode`) only when the user has agreed it. Phase 3 on is built out
+of plan mode, on whichever model the setting gives it.
+
 Two kinds of feature come through here, and they are verified differently:
 something **the user sees**, and a **tool**, which measures the project or
 holds it to something. Phase 4 has a track for each.
@@ -66,7 +74,8 @@ Write a short spec and show it in chat. Keep it under a screen.
     from noise
 
 Ask the user to agree the spec or change it. Use AskUserQuestion only for
-real decisions.
+real decisions. The spec is the plan put to the user with `ExitPlanMode`:
+their approval of it is the agreement, and nothing is built before it.
 
 ## 3. Build test-first
 
