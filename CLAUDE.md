@@ -65,6 +65,10 @@ headless boot and a GPU frame, and say so in the file.
     npm run smoke          the game in headless Chromium on the real GPU (Playwright, smoke/)
     npm run look           the scenes held to the pictures in smoke/screens
 
+A unit test is allowed thirty seconds, and `vitest.config.ts` says why: the
+limit is there to catch a test that never ends, and how fast the game steps
+is the bench's to hold.
+
 `--update` on `pace:check` or `bench`, `npm run perf:update` and `npm run
 look:update` write a baseline again. Only through `/gate-moved`, only for a
 change meant to move it, and the commit says why. Look at every picture.
