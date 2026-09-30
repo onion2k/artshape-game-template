@@ -13,8 +13,9 @@ day.
 ## 1. What moved
 
 Which gate, which figure, from what to what, and which way. Quicker is as
-much a change as slower where the gate is pacing or balance; for the bench
-only slower fails, but faster is worth a look too.
+much a change as slower, for the bench as for pacing or balance: a frame
+gone faster is written into the baseline, so that giving the speed back
+later is seen.
 
 ## 2. Is it real?
 
@@ -25,7 +26,9 @@ Noise looks like a swing on few seeds or one run. Before believing it:
   medians. A swing that holds on the wider run is real.
 - **Bench:** run it again with nothing else running. Read the relative
   figure, not the milliseconds: the reference arithmetic is there to take
-  the machine out of it.
+  the machine out of it, and does so while the machine has cores to spare.
+  With most of them at other work the two do not slow alike, and the figure
+  can read a sixth out either way.
 - **A picture:** look at the three files a failure leaves in
   `test-results/`: the picture it was held to, what was drawn, and the
   difference. A change in the game is a shape; the GPU's own drift is

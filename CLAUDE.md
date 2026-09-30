@@ -41,7 +41,7 @@ Numbers, held by gates, on this machine at 1280×800:
 | Boot, page start to the frame loop running             | 3000 ms                        | `perf`       |
 | Download, scripts and styles gzipped                   | 400 kB                         | `perf`       |
 | A frame drawn, lower quartile at the standard view     | 8 ms                           | `perf`       |
-| The physics, a frame, against the reference arithmetic | baseline ± 20%                 | `bench`      |
+| The physics, a frame, against the reference arithmetic | baseline ± 15%                 | `bench`      |
 | Pace, the autopilot's minutes to bank ten balls        | baseline ± 20%                 | `pace:check` |
 | Anything kept: bodies, slots, save bytes, heap         | ceilings in `scripts/leaks.ts` | `leaks`      |
 
@@ -60,7 +60,7 @@ headless boot and a GPU frame, and say so in the file.
     npm run determinism    the same seed played twice, hashed, to catch chance not from the seed
     npm run leaks          an hour of play, watching what must stay bounded (10 min of it in check)
     npm run pace           the autopilot's pace, seed by seed; pace:check holds it to its baseline
-    npm run bench          the physics' frame time held to scripts/bench-baseline.json
+    npm run bench          the physics' frame time held to scripts/bench-baseline.json, both ways
     npm run perf           boot, frame and download held to smoke/perf-baseline.json and the budget
     npm run smoke          the game in headless Chromium on the real GPU (Playwright, smoke/)
     npm run look           the scenes held to the pictures in smoke/screens
@@ -72,6 +72,9 @@ is the bench's to hold.
 `--update` on `pace:check` or `bench`, `npm run perf:update` and `npm run
 look:update` write a baseline again. Only through `/gate-moved`, only for a
 change meant to move it, and the commit says why. Look at every picture.
+The bench writes its baseline from two readings, and only where they agree:
+a baseline written while the machine is at other work fails every run after
+it.
 
 ## How the code is laid out
 
@@ -104,8 +107,12 @@ What to copy the shape of, when building something new:
   `arena.ts`, drawn by `scene.ts`, banked by `game.ts`, counted by
   `invariants.ts`, read by `debug.ts`, and pictured in `smoke/look.spec.ts`.
   [Replace with the game's own first features once it has them.]
-- **Tools:** the fuzzer (`scripts/fuzzer.ts`) and the pace gate
-  (`scripts/pace.ts`). Each has unit tests of its own working parts.
+- **Tools:** the fuzzer (`scripts/fuzzer.ts`), the pace gate
+  (`scripts/pace.ts`) and the bench (`scripts/bench.ts`, its arithmetic in
+  `scripts/benching.ts`). Each has unit tests of its own working parts. The
+  bench passed a frame made thirty times slower until it was made to fail
+  one on purpose: a gate is trusted once it has been seen to fail what it
+  is for.
 - **Test helpers:** `newGame(seed)` in `test/helpers.ts`, and `memoryStore`
   in `src/progress.ts` for a save that is not the player's.
 
