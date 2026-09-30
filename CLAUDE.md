@@ -40,7 +40,7 @@ Numbers, held by gates, on this machine at 1280×800:
 | ------------------------------------------------------ | ------------------------------ | ------------ |
 | Boot, page start to the frame loop running             | 3000 ms                        | `perf`       |
 | Download, scripts and styles gzipped                   | 400 kB                         | `perf`       |
-| A frame drawn, lower quartile at the standard view     | 8 ms                           | `perf`       |
+| A frame drawn, the least of 24 at the standard view    | 8 ms                           | `perf`       |
 | The physics, a frame, against the reference arithmetic | baseline ± 15%                 | `bench`      |
 | Pace, the autopilot's minutes to bank ten balls        | baseline ± 20%                 | `pace:check` |
 | Anything kept: bodies, slots, save bytes, heap         | ceilings in `scripts/leaks.ts` | `leaks`      |

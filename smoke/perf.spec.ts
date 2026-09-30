@@ -11,7 +11,7 @@
  *
  * The boot and the frame are this machine's, headless on its own GPU, and
  * both wobble from run to run; the tolerances were set by running it several
- * times first, and the frame is the lower quartile of many. The download is
+ * times first, and the frame is the least of many samples. The download is
  * the built bundle, gzipped, and does not wobble at all.
  */
 import { execFileSync } from 'node:child_process';
@@ -24,8 +24,13 @@ import { start, watch } from './game';
 const BASELINE = 'smoke/perf-baseline.json';
 /** What the game may cost at all, on this machine, whatever it cost before. */
 export const BUDGET = { bootMs: 3000, frameMs: 8, bundleKb: 400 };
-/** How far a figure may move from the baseline before it is a change: a share, and a slack for the noisy ones. */
-const TOLERANCE = { bootMs: [0.35, 250], frameMs: [0.3, 0.6], bundleKb: [0.1, 2] } as const;
+/**
+ * How far a figure may move from the baseline before it is a change: a share, and a slack for the noisy ones.
+ * The frame read 0.171 to 0.178 ms over forty pages just booted, 4% highest over lowest, on an M4 Pro with other
+ * sessions at work on it: 15% is between three and four times that, and its slack is a hundredth of a millisecond,
+ * since the 0.6 ms it had was three times the frame and let one through at half its baseline and at three times it.
+ */
+const TOLERANCE = { bootMs: [0.35, 250], frameMs: [0.15, 0.01], bundleKb: [0.1, 2] } as const;
 
 interface Figures {
   bootMs: number;
@@ -58,9 +63,10 @@ test('boots, draws and downloads within budget, and as it did before', async ({ 
     g.step(180);
     g.look(0, 0, { azimuth: 0.9, polar: 0.95, radius: 90 });
     g.step(1);
+    // the first measuring on a page just booted: it keeps the GPU drawing for a quarter of a second before it times
     return g.measureFrame();
   });
-  const now: Figures = { bootMs: Math.round(boot), frameMs: Math.round(frame * 100) / 100, bundleKb: bundle };
+  const now: Figures = { bootMs: Math.round(boot), frameMs: Math.round(frame * 1000) / 1000, bundleKb: bundle };
   info.annotations.push({ type: 'perf', description: JSON.stringify(now) });
   console.log(`perf: boot ${now.bootMs} ms, frame ${now.frameMs} ms, download ${now.bundleKb} kB`);
 

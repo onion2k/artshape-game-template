@@ -132,8 +132,15 @@ async function main() {
     renderer.move(1, scene.sled, 1);
   }
 
-  /** What a frame of the scene as it stands costs, drawn to a texture of our own rather than the canvas, so no wait to be shown is counted. */
-  async function measureFrame(): Promise<number> {
+  /** Whether a frame is being measured: the frame loop stands still while one is. */
+  let measuring = false;
+
+  /**
+   * What a frame of the scene as it stands costs, drawn to a texture of our own rather than the canvas, so no wait
+   * to be shown is counted. The frame loop draws nothing meanwhile: its frame, sixty times a second, fell in one
+   * sample in three and read as a frame taking twice as long.
+   */
+  async function measureFrame(warm?: number): Promise<number> {
     const target = ctx.device.createTexture({
       label: 'measuring target',
       size: [width, height],
@@ -141,15 +148,20 @@ async function main() {
       usage: GPUTextureUsage.RENDER_ATTACHMENT,
     });
     const view = target.createView();
-    const cost = await frameCost(
-      () => {
-        upload();
-        return renderer.frame(view, 'redraw', 1 / 60);
-      },
-      () => ctx.device.queue.onSubmittedWorkDone(),
-    );
-    target.destroy();
-    return cost;
+    measuring = true;
+    try {
+      return await frameCost(
+        () => {
+          upload();
+          return renderer.frame(view, 'redraw', 1 / 60);
+        },
+        () => ctx.device.queue.onSubmittedWorkDone(),
+        warm,
+      );
+    } finally {
+      measuring = false;
+      target.destroy();
+    }
   }
 
   await renderer.ready;
@@ -213,6 +225,7 @@ async function main() {
     requestAnimationFrame(frame);
     const dt = Math.min((now - last) / 1000, 1 / 20);
     last = now;
+    if (measuring) return;
     if (paused) {
       draw(0);
       return;

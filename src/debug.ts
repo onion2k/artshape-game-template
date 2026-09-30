@@ -87,8 +87,12 @@ export interface GameApi {
 
   /** The camera looking at a point, from `azimuth` round and `polar` down, `radius` away, at once. */
   look(x: number, y: number, view?: { azimuth?: number; polar?: number; radius?: number }): void;
-  /** What drawing a frame of the scene as it stands costs, in milliseconds. */
-  measureFrame(): Promise<number>;
+  /**
+   * What drawing a frame of the scene as it stands costs, in milliseconds, once the GPU has been kept drawing for
+   * `warm` of them: a quarter of a second unless told otherwise, which is what one that sat idle while the page
+   * booted needs. A test that measures scene after scene may ask for less after the first.
+   */
+  measureFrame(warm?: number): Promise<number>;
 }
 
 /** What the page gives the API that is not the game's: time, the controls, the camera and the renderer. */
@@ -104,7 +108,7 @@ export interface DebugHost {
   frame(): number;
   setDrive(drive: { throttle: number; steer: number } | null): void;
   look(x: number, y: number, view: { azimuth?: number; polar?: number; radius?: number }): void;
-  measureFrame(): Promise<number>;
+  measureFrame(warm?: number): Promise<number>;
   events: string[];
 }
 
@@ -177,6 +181,6 @@ export function createApi(host: DebugHost): GameApi {
     },
 
     look: (x, y, view = {}) => host.look(x, y, view),
-    measureFrame: () => host.measureFrame(),
+    measureFrame: (warm) => host.measureFrame(warm),
   };
 }
