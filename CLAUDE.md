@@ -66,7 +66,7 @@ should not have is looked into.
     npm run bench          the physics' frame time held to scripts/bench-baseline.json, both ways
     npm run perf           boot, frame and download held to smoke/perf-baseline.json and the budget
     npm run smoke          the game in headless Chromium on the real GPU (Playwright, smoke/)
-    npm run look           the scenes held to the pictures in smoke/screens
+    npm run look           the scenes held to the pictures in smoke/screens, to the pixel
 
 A unit test is allowed thirty seconds, and `vitest.config.ts` says why: the
 limit is there to catch a test that never ends, and how fast the game steps

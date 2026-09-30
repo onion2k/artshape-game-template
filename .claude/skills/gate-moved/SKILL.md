@@ -35,7 +35,11 @@ Noise looks like a swing on few seeds or one run. Before believing it:
 - **A picture:** look at the three files a failure leaves in
   `test-results/`: the picture it was held to, what was drawn, and the
   difference. A change in the game is a shape; the GPU's own drift is
-  scattered pixels.
+  scattered pixels. The template's picture does not drift at all, and is
+  held to the pixel; where a game's does, draw the scene on twenty pages
+  just booted and count the pixels that move at each threshold before
+  choosing one, and never forgive a share of the picture: a button is
+  seven hundred pixels of a million.
 
 If it is not real, the tolerance is wrong. Say why it is set as it is (each
 gate's file says), and widen it only with the reason written beside it.
