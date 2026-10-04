@@ -72,6 +72,10 @@ Write a short spec and show it in chat. Keep it under a screen.
   - the pictures to take
   - for a tool: the gate, its baseline, and how a change to it is told
     from noise
+- **Parts:** the spec ends with a checklist, one box a part in the order
+  they will be built, with the check that proves each part beside it. A box
+  is ticked in phase 3 as its part's tests go green, so where the work
+  stands can be read off the file at any time.
 
 Ask the user to agree the spec or change it. Use AskUserQuestion only for
 real decisions. The spec is the plan put to the user with `ExitPlanMode`:
@@ -91,16 +95,23 @@ their approval of it is the agreement, and nothing is built before it.
    feature.
 4. Add the fuzzer action: only what a user could do. Add any new always-true
    rule to the invariants.
-5. Make the tests pass.
+5. Make the tests pass, and tick the part's box in the spec.
 
 A tool is code like any other: its own working parts get their own unit
 tests, not just the end-to-end run. A bug in the middle of a tool does not
 throw — it quietly gives a wrong number, and an end-to-end run is a slow and
 poor way to find it.
 
-## 4. Verify: evidence, not belief
+Run only the tests being written and the quick check as you go. The full
+check, the fuzzer, the perf gate and the look are phase 4, once: not after
+each step, and not for each part of a plan. A build that runs them as it
+goes can spend half its time inside them.
 
-Do all of it, and keep the numbers and file paths for the report.
+## 4. Verify and fix, once, at the end
+
+When the build is complete, run all of it as one pass, and keep the numbers
+and file paths for the report. What the pass finds is fixed at its cause,
+and the pass is run again until it is clean.
 
 Both kinds:
 
@@ -114,10 +125,11 @@ Both kinds:
 
 Something the user sees, as well:
 
-- **Performance.** The project's perf gate before and after (use
-  `git stash` for the before), and the frame measured headless in any other
-  scene the feature touches. Over budget is not done: the feature gets a
-  rung the game steps down to, or is made cheaper.
+- **Performance.** The project's perf gate run in the pass, the change
+  against its parent commit (a worktree or `git stash` for the before), and
+  the frame measured headless in any other scene the feature touches. Over
+  budget is not done: the feature gets a rung the game steps down to, or is
+  made cheaper.
 - **Look.** Headless screenshots of the feature in every scene it appears
   in, at phone size if it has UI, and before/after where it changes
   something already there. Read every screenshot, and tune until it looks
@@ -155,6 +167,7 @@ Report in chat, briefly:
 
 - **Result:** what was built, in one or two sentences.
 - **Acceptance criteria:** each one, and the test that proves it.
+- **Parts:** which of the spec's boxes are ticked, and why any is not.
 - **Checks:** results with numbers (tests, fuzz seeds and frames, each gate,
   frame costs before and after).
 - **What the numbers show,** for a tool: what it says about the project now.
